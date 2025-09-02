@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JorgeDiaz</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Bienvenido al Sistema de Inventario</h1>
+    <p>Gestiona los productos de tu ferretería de forma sencilla.</p>
+    <ul>
+        <li><a href="{{ url_for('inventario') }}">Ver Inventario</a></li>
+        <li><a href="{{ url_for('agregar') }}">Agregar Producto</a></li>
+        <li><a href="{{ url_for('buscar') }}">Buscar Producto</a></li>
+    </ul>
+    <footer style="margin-top:40px; text-align:center; color:#555;">
+        <hr>
+        <p>Elaborado por Jorge Diaz &copy; 2025</p>
+    </footer>
+</body>
+</html>
