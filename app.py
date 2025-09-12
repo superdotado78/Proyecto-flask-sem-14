@@ -1,17 +1,21 @@
 # app.py
 from flask import Flask, render_template, request, redirect, url_for, flash
 from repository import (
-    init_db, crear_producto, eliminar_producto,
-    actualizar_cantidad, actualizar_precio, actualizar_nombre,
-    buscar_por_nombre, listar_todos, obtener_por_id
+    init_db, crear_producto, listar_todos, obtener_por_id,
+    eliminar_producto, actualizar_nombre, actualizar_cantidad, actualizar_precio,
+    buscar_por_nombre,
+    crear_usuario, listar_usuarios, obtener_usuario_por_id,
+    actualizar_usuario, eliminar_usuario
 )
 from models import Producto
 
 app = Flask(__name__)
-app.secret_key = "clave_secreta_segura"  # Necesaria para flash messages
+app.secret_key = "clave_secreta_segura"  # necesaria para flash messages
 
 # Inicializa la base de datos al arrancar
 init_db()
+
+# -------------------- RUTAS PRODUCTOS --------------------
 
 @app.route("/")
 def index():
@@ -76,6 +80,45 @@ def buscar():
         patron = request.form["patron"]
         resultados = buscar_por_nombre(patron)
     return render_template("buscar.html", resultados=resultados)
+
+# -------------------- RUTAS USUARIOS --------------------
+
+@app.route("/usuarios")
+def usuarios():
+    lista = listar_usuarios()
+    return render_template("usuarios.html", usuarios=lista)
+
+@app.route("/usuarios/agregar", methods=["GET", "POST"])
+def agregar_usuario():
+    if request.method == "POST":
+        nombre = request.form["nombre"]
+        mail = request.form["mail"]
+        crear_usuario(nombre, mail)
+        flash("Usuario agregado correctamente.", "success")
+        return redirect(url_for("usuarios"))
+    return render_template("agregar_usuario.html")
+
+@app.route("/usuarios/eliminar/<int:idusuario>")
+def eliminar_usuario_route(idusuario):
+    eliminar_usuario(idusuario)
+    flash("Usuario eliminado.", "success")
+    return redirect(url_for("usuarios"))
+
+@app.route("/usuarios/editar/<int:idusuario>", methods=["GET", "POST"])
+def editar_usuario(idusuario):
+    usuario = obtener_usuario_por_id(idusuario)
+    if not usuario:
+        flash("Usuario no encontrado.", "danger")
+        return redirect(url_for("usuarios"))
+    if request.method == "POST":
+        nombre = request.form["nombre"]
+        mail = request.form["mail"]
+        actualizar_usuario(idusuario, nombre, mail)
+        flash("Usuario actualizado correctamente.", "success")
+        return redirect(url_for("usuarios"))
+    return render_template("editar_usuario.html", usuario=usuario)
+
+# -------------------- RUN APP --------------------
 
 if __name__ == "__main__":
     app.run(debug=True)
