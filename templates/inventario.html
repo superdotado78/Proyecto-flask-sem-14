@@ -1,22 +1,19 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Inventario</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Inventario</h1>
-    <a href="{{ url_for('agregar') }}">Agregar nuevo producto</a>
-    <br><br>
-    <table border="1" cellpadding="5">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Cantidad</th>
-            <th>Precio</th>
-            <th>Acciones</th>
-        </tr>
+{% extends "base.html" %}
+{% block title %}Inventario{% endblock %}
+{% block content %}
+    <h1 class="mb-4">Inventario</h1>
+    <a href="{{ url_for('agregar') }}" class="btn btn-success mb-3">Agregar nuevo producto</a>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for p in productos %}
         <tr>
             <td>{{ p.id }}</td>
@@ -24,13 +21,14 @@
             <td>{{ p.cantidad }}</td>
             <td>${{ "%.2f"|format(p.precio) }}</td>
             <td>
-                <a href="{{ url_for('actualizar', id_=p.id) }}">Actualizar</a> |
-                <a href="{{ url_for('eliminar', id_=p.id) }}" onclick="return confirm('¿Seguro que deseas eliminar este producto?');">Eliminar</a>
+                <a href="{{ url_for('actualizar', id=p.id) }}" class="btn btn-primary btn-sm">Actualizar</a>
+                <form action="{{ url_for('eliminar', id=p.id) }}" method="post" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este producto?');">Eliminar</button>
+                </form>
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>
-    <br>
-    <a href="{{ url_for('index') }}">Volver al inicio</a>
-</body>
-</html>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary mt-3">Volver al inicio</a>
+{% endblock %}

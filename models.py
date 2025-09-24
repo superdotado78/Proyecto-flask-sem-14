@@ -10,13 +10,14 @@
 # ------------------------------------------------------------
 from __future__ import annotations
 from typing import Dict, List, Tuple
+from flask_login import UserMixin
 
 
 class Producto:
     """Entidad de dominio que representa un ítem del inventario."""
 
     def __init__(self, id_: int, nombre: str, cantidad: int, precio: float) -> None:
-        self._id = int(id_)
+        self._id = int(id_) if id_ is not None else None
         self.nombre = nombre         # usa setter (valida)
         self.cantidad = cantidad     # usa setter (valida)
         self.precio = precio         # usa setter (valida)
@@ -101,4 +102,16 @@ class Inventario:
         self._items[id_].precio = nuevo
 
     def buscar_por_nombre(self, patron: str) -> List[Producto]:
-        patron
+        pass
+
+# -------------------- Clase Usuario (revisada) --------------------
+
+class Usuario(UserMixin):
+    """Modelo de usuario compatible con Flask-Login."""
+    def __init__(self, idusuario: int, nombre: str, mail: str):
+        self.id = idusuario
+        self.nombre = nombre
+        self.mail = mail
+
+    def get_id(self):
+        return str(self.id)

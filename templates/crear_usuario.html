@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Usuario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Crear Nuevo Usuario</h1>
+    <form action="{{ url_for('crear_usuario_web') }}" method="post">
+        <label for="nombre">Nombre:</label><br>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+        <label for="mail">Correo:</label><br>
+        <input type="email" id="mail" name="mail" required><br><br>
+        <button type="submit">Crear Usuario</button>
+    </form>
+    <br>
+    <a href="{{ url_for('usuarios') }}">Volver a la lista de usuarios</a>
+</body>
+</html>

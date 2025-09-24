@@ -45,8 +45,8 @@ def crear_producto(p: Producto) -> None:
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
-        "INSERT INTO productos (id, nombre, cantidad, precio) VALUES (%s,%s,%s,%s)",
-        (p.id, p.nombre, p.cantidad, p.precio)
+        "INSERT INTO productos (nombre, cantidad, precio) VALUES (%s, %s, %s)",
+        (p.nombre, p.cantidad, p.precio)
     )
     conn.commit()
     cursor.close()
@@ -156,3 +156,13 @@ def eliminar_usuario(idusuario: int) -> None:
     conn.commit()
     cursor.close()
     conn.close()
+
+
+def obtener_usuario_por_mail(mail: str) -> dict | None:
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM usuarios WHERE mail=%s", (mail,))
+    usuario = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return usuario
